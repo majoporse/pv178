@@ -82,7 +82,10 @@
 
 	private async Task refreshReviews()
 	{
+		Reviews = new();
+		StateHasChanged();
 		await GetReviews();
+		Reviews.Sort((a, b) => b.CreatedAt.CompareTo(a.CreatedAt));
 		StateHasChanged();
 	}
 
