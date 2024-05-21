@@ -12,7 +12,7 @@
 
 @code {
 	[Parameter]
-	public List<Review> Items { get; set; }
+	public List<Review> Items { get; set; } = new();
 
 	[Parameter]
 	public EventCallback refresh { get; set; }

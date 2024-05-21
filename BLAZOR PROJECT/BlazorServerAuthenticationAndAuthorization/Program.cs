@@ -1,5 +1,4 @@
 using BlazorServerAuthenticationAndAuthorization.Authentication;
-using BlazorServerAuthenticationAndAuthorization.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
@@ -32,7 +31,6 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<ProtectedSessionStorage>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
-builder.Services.AddSingleton<WeatherForecastService>();
 
 builder.Services.AddDbContextFactory<PowerPalsContext>(options =>
 {

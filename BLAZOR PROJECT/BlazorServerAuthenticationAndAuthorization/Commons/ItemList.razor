@@ -8,16 +8,9 @@
 </MudList>
 
 @code {
-
 	[Parameter]
 	public List<Preview> Items { get; set; } = new List<Preview>();
 
 	[Parameter]
 	public EventCallback<int> onClick { get; set; }
-
-	override protected void OnInitialized()
-	{
-		base.OnInitialized();
-	}
-
 }

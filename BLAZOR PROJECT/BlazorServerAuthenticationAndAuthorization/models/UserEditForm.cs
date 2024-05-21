@@ -4,7 +4,7 @@ namespace BlazorServerAuthenticationAndAuthorization.models;
 public class UserEditForm : RegisterAccountForm
 {
     [Required]
-    //[StringLength(420, ErrorMessage = "Name length can't be more than 420.")]
+    [StringLength(420, ErrorMessage = "Name length can't be more than 420.")]
     public string bio { get; set; } = "";
 
     [Required]

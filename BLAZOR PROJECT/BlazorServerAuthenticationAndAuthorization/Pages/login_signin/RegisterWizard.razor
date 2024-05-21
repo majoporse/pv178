@@ -24,8 +24,8 @@ else if (step == 3)
 }
 
 @code{
-	int step = 1;
-	public User user { get; set; } = new User();
+	private int step = 1;
+	private User user { get; set; } = new();
 
 	private void NextStep()
 	{
@@ -36,7 +36,7 @@ else if (step == 3)
 	private async Task registerUserAsync()
 	{
 		await userService.AddUserAsync(user);
-		var userDb = await userService.GetUserByNameAsync(user.Name);
+		var userDb = (await userService.GetUserByNameAsync(user.Name))!;
 		var customAuthStateProvider = (CustomAuthenticationStateProvider) AuthenticationStateProvider;
 		await customAuthStateProvider.UpdateAuthenticationState(new UserSession
 			{

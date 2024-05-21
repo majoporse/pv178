@@ -34,7 +34,7 @@ public class GymService
     public async Task<List<Review>> GetReviewsAsync(int gymId)
     {
         using var db = _contextFactory.CreateDbContext();
-        return await db.Reviews.Where(r => r.Gym.Id == gymId).ToListAsync();
+        return await db.Reviews.Include(r => r.User).Where(r => r.Gym.Id == gymId).ToListAsync();
     }
 
     public async Task UpdateGymAsync(Gym gym)

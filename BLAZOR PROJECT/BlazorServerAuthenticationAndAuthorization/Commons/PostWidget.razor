@@ -1,7 +1,6 @@
 ﻿@using BlazorServerAuthenticationAndAuthorization.models
 @using System.Security.Claims
 @using powerPalsDb.Models
-@inject PowerPalsServices.UserService UserService
 @inject PowerPalsServices.PostService PostService
 @inject NavigationManager navigationManager
 
@@ -64,42 +63,36 @@
 </MudCard>
 
 @code {
-    public MudChip[] selected;
-
     [Parameter]
-    public Post post { get; set; }
-
-    public bool owner { get; set; } = false;
-
-    private bool editMode { get; set; } = false;
-
-    private bool forReadOnly = true;
-
-    [CascadingParameter]
-    protected Task<AuthenticationState> authenticationState { get; set; }
-
-    private User user = new();
+    public Post post { get; set; } = new();
 
     [Parameter]
     public EventCallback refresh { get; set; }
 
+    [CascadingParameter]
+    protected Task<AuthenticationState>? authenticationState { get; set; }
+    
+    private MudChip[]? selected;
+    
+    private bool owner = false;
+    private bool editMode = false;
+
+    private User user = new();
+
     protected override async Task OnInitializedAsync()
     {
-        var state = await authenticationState;
+        var state = await authenticationState!;
 
         // Assuming the user's ID is stored as a claim with the type ClaimTypes.NameIdentifier
         string userId = state.User.Claims.ToList().Find(i => i.Type == ClaimTypes.NameIdentifier)!.Value;
-        user = await UserService.GetUserByIdAsync(post.UserId);
+        user = post.User;
         if (int.Parse(userId) == post.UserId)
         {
             owner = true;
         }
     }
 
-    private void OpenEdit()
-    {
-        editMode = true;
-    }
+    private void OpenEdit() => editMode = true;
 
     private async void EditPost()
     {

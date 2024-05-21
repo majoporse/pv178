@@ -24,14 +24,13 @@
 
 @code {
 	private string[] tags = new string[] { "Powerlifting", "Bodybuilding", "Weightlifting", "Strongman" };
-	private MudChip[] selected;
+	private MudChip[]? selected;
 
 	private User user = new();
 	private List<Post> posts = new();
 
-
 	[CascadingParameter]
-	protected Task<AuthenticationState> authenticationState { get; set; }
+	protected Task<AuthenticationState>? authenticationState { get; set; }
 
 	private async Task UpdatePosts()
 	{
@@ -46,9 +45,9 @@
 	protected override async Task OnInitializedAsync()
 	{
 		base.OnInitialized();
-		var state = await authenticationState;
+		var state = await authenticationState!;
 		string userId = state.User.Claims.ToList().Find(i => i.Type == ClaimTypes.NameIdentifier)!.Value;
-		user = await UserService.GetUserByIdAsync(int.Parse(userId));
+		user = (await UserService.GetUserByIdAsync(int.Parse(userId)))!;
 		await UpdatePosts();
 	}
 }

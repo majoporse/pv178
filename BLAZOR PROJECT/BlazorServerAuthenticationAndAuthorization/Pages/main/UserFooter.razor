@@ -4,18 +4,15 @@
 
 <MudTabs Elevation="4" Rounded="true" Centered="true" Color="@Color.Primary" Class="d-flex align-items-center">
 
-
 	<MudTabPanel Text="FOLLOWERS">
 		<ItemList Items="@(Followers.Select(user => new Preview(){ Name = user.Name, ImageUrl = user.ProfilePicUrl, Id = user.Id}).ToList())"
 				  onClick="@((id) => NavigationManager.NavigateTo($"/user/{id}", true))" />
 	</MudTabPanel>
 
-
 	<MudTabPanel Text="FOLLOWING">
 		<ItemList Items="@(Following.Select(user => new Preview(){ Name = user.Name, ImageUrl = user.ProfilePicUrl, Id = user.Id}).ToList())"
 				  onClick="@((id) => NavigationManager.NavigateTo($"/user/{id}", true))" />
 	</MudTabPanel>
-
 
 	<MudTabPanel Text="POSTS">
 		<MudChipSet @bind-SelectedChips="selected" MultiSelection="true" 
@@ -29,7 +26,6 @@
 		<PostList Posts="@Posts" refresh="refresh" />
 	</MudTabPanel>
 
-
 	<MudTabPanel Text="GYMS">
 		<ItemList Items="@(Gyms.Select(gym => new Preview(){ Name = gym.Name, ImageUrl = gym.ImageUrl, Id = gym.Id}).ToList())"
 				  onClick="@((id) => NavigationManager.NavigateTo($"/gym/{id}", true))" />
@@ -38,7 +34,7 @@
 
 @code {
 	private string[] tags = new string[] { "Powerlifting", "Bodybuilding", "Weightlifting", "Strongman" };
-	private MudChip[] selected;
+	private MudChip[]? selected;
 
 	[Parameter]
 	public List<User> Followers { get; set; } = new();

@@ -27,22 +27,22 @@
 
 
 @code {
-    public PostDataForm model = new PostDataForm() { };
+    [Parameter]
+    public Gym gym { get; set; } = new();
+
+    [CascadingParameter]
+    protected Task<AuthenticationState>? authenticationState { get; set; }
 
     [Parameter]
-    public Gym gym { get; set; }
+    public EventCallback refresh { get; set; }
+
+    private PostDataForm model = new();
 
     private User user = new();
 
     private int stars = 0;
 
     private Review review = new Review();
-
-    [CascadingParameter]
-    protected Task<AuthenticationState> authenticationState { get; set; }
-
-    [Parameter]
-    public EventCallback refresh { get; set; }
 
     public class PostDataForm
     {
@@ -53,10 +53,10 @@
 
     protected override async Task OnInitializedAsync()
 	{
-		var state = await authenticationState;
+		var state = await authenticationState!;
 
 		string userId = state.User.Claims.ToList().Find(i => i.Type == ClaimTypes.NameIdentifier)!.Value;
-        user = await UserService.GetUserByIdAsync(int.Parse(userId));
+        user = (await UserService.GetUserByIdAsync(int.Parse(userId)))!;
 		review.UserId = int.Parse(userId);
 		review.GymId = gym.Id;
 	}

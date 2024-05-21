@@ -34,14 +34,11 @@
     RegisterGymForm model = new RegisterGymForm();
 
     [CascadingParameter]
-    protected Task<AuthenticationState> authenticationState { get; set; }
-
-    [Parameter]
-    public EventCallback<RegisterGymForm> onsubmit { get; set; }
+    protected Task<AuthenticationState>? authenticationState { get; set; }
 
     private async void OnValidSubmit(EditContext context)
     {
-        var state = await authenticationState;
+        var state = await authenticationState!;
         string userId = state.User.Claims.ToList().Find(i => i.Type == ClaimTypes.NameIdentifier)!.Value;
         Gym gym = new Gym()
         {

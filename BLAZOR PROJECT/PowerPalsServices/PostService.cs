@@ -47,6 +47,7 @@ public class PostService
         using var db = _contextFactory.CreateDbContext();
         return await db.Posts
                     .Include(p => p.Tags)
+                    .Include(p => p.User)
                     .Where(p => p.User.Id == userId && p.Tags.Any(t => tags.Contains(t.Name)))
                     .ToListAsync();
     }
@@ -69,6 +70,7 @@ public class PostService
         using var db = _contextFactory.CreateDbContext();
         return await db.Posts
             .Include(p => p.Tags)
+            .Include(p => p.User)
             .Join(
                 db.Friendships,
                 p => p.UserId,

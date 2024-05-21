@@ -5,7 +5,6 @@
 @inject PowerPalsServices.GymService GymService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
-@inject PowerPalsServices.UserService userService
 @inject ISnackbar Snackbar
 @using BlazorServerAuthenticationAndAuthorization.Authentication
 @using BlazorServerAuthenticationAndAuthorization.models
@@ -33,12 +32,12 @@
 </EditForm>
 
 @code {
-    int step = 1;
+    private int step = 1;
 
     public Gym gym { get; set; } = new();
 
     [Parameter]
-    public string gymId { get; set; }
+    public string? gymId { get; set; }
 
     RegisterGymForm model = new RegisterGymForm();
     bool success;
@@ -55,8 +54,8 @@
     protected override async Task OnInitializedAsync()
     {
         var state = await ((CustomAuthenticationStateProvider)AuthenticationStateProvider).GetAuthenticationStateAsync();
-        var userId = state.User.Claims.ToList().Find(i => i.Type == ClaimTypes.NameIdentifier)!.Value;
-        var user = await userService.GetUserByIdAsync(int.Parse(userId));
+        var _userId = state.User.Claims.ToList().Find(i => i.Type == ClaimTypes.NameIdentifier)!.Value;
+        var userId = int.Parse(_userId);
 
         //check if the route parameter is correct
         if (gymId == null || !int.TryParse(gymId, out var gymIdNum))
@@ -65,14 +64,15 @@
             NavigationManager.NavigateTo("/home");
         }
 
-        gym = await GymService.GetGymByIdAsync(int.Parse(gymId));
-        if (gym == null)
-		{
-			Snackbar.Add("Gym does not exist", Severity.Error);
-			NavigationManager.NavigateTo("/home");
-		}
+        var _gym = await GymService.GetGymByIdAsync(int.Parse(gymId!));
+        if (_gym == null)
+        {
+            Snackbar.Add("Gym does not exist", Severity.Error);
+            NavigationManager.NavigateTo("/home");
+        }
+        gym = _gym!;
 
-        if (gym.UserId != user.Id)
+        if (gym.UserId != userId)
 		{
 			Snackbar.Add("You do not have permission to edit this gym", Severity.Error);
 			NavigationManager.NavigateTo("/home");

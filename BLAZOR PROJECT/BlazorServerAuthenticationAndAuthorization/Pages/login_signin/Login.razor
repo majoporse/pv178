@@ -8,7 +8,6 @@
 @inject AuthenticationStateProvider authStateProvider
 @inject IJSRuntime js
 
-
 <MudText Typo="Typo.h1">LOG-IN</MudText>
 <MudDivider Class="flex-grow-0 border-2 w-50" Style="@($"height: 1px; border-color: {Colors.DeepPurple.Default}")" />
 
@@ -24,9 +23,7 @@
 </EditForm>
 
 @code {
-
-    LoginForm model = new LoginForm();
-    bool success;
+    LoginForm model = new();
 
     private async void OnValidSubmit(EditContext context)
     {
@@ -39,11 +36,10 @@
 
         var customAuthStateProvider = (CustomAuthenticationStateProvider) authStateProvider;
         await customAuthStateProvider.UpdateAuthenticationState(new UserSession
-            {
-                UserName = userAccount.Name,
-                Id = userAccount.Id
-            });
+        {
+            UserName = userAccount.Name,
+            Id = userAccount.Id
+        });
         navigationManager.NavigateTo("/home", true);
-
     }
 }

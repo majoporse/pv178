@@ -28,14 +28,13 @@
 
 @code {
     [Parameter]
-    public User user { get; set; }
-
-    public RegisterAccountForm RegisterModel { get; set; } = new RegisterAccountForm();
-    bool success;
+    public User user { get; set; } = new();
 
     [Parameter]
-
     public Action onClick { get; set; }
+
+    private RegisterAccountForm RegisterModel { get; set; } = new();
+
     private void OnValidSubmit(EditContext context)
     {
         user.Name = RegisterModel.Username;
@@ -43,5 +42,4 @@
         user.Password = RegisterModel.Password;
         onClick();
     }
-
 }

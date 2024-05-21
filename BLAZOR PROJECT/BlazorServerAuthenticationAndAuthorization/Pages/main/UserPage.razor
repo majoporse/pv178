@@ -1,7 +1,6 @@
 ﻿@page "/user/{powerPalId}"
 @using BlazorServerAuthenticationAndAuthorization.models
 @using BlazorServerAuthenticationAndAuthorization.Commons
-@using BlazorServerAuthenticationAndAuthorization.Data
 @using System.Security.Claims
 @using powerPalsDb.Models
 @inject PowerPalsServices.PostService PostService
@@ -55,10 +54,10 @@
 @code {
 
 	[CascadingParameter]
-	protected Task<AuthenticationState> authenticationState { get; set; }
+	protected Task<AuthenticationState>? authenticationState { get; set; }
 
 	[Parameter]
-	public string powerPalId { get; set; }
+	public string? powerPalId { get; set; }
 
 	private List<string> tags = new List<string>{ "Powerlifting", "Bodybuilding", "Weightlifting", "Strongman" };
 
@@ -66,20 +65,20 @@
 
 	private User user = new User();
 
-	public List<User> Followers { get; set; } = new();
-	public List<User> Following { get; set; } = new();
-	public List<Post> Posts { get; set; } = new();
-	public List<Gym> Gyms { get; set; } = new();
+	private List<User> Followers { get; set; } = new();
+	private List<User> Following { get; set; } = new();
+	private List<Post> Posts { get; set; } = new();
+	private List<Gym> Gyms { get; set; } = new();
 
 	private bool following = false;
 
-	protected void UpdatePosts(List<string> newtags)
+	private async void UpdatePosts(List<string> newtags)
 	{
 		tags = newtags;
-		refresh();
+		await refresh();
 	}
 
-	protected async Task refresh()
+	private async Task refresh()
 	{
 		await GetFollowers();
 		await GetFollowing();
@@ -117,10 +116,10 @@
 			NavigationManager.NavigateTo("/home");
 			return;
 		}
-		var state = await authenticationState;
+		var state = await authenticationState!;
 
 		string userId = state.User.Claims.ToList().Find(i => i.Type == ClaimTypes.NameIdentifier)!.Value;
-		user = await UserService.GetUserByIdAsync(int.Parse(userId));
+		user = (await UserService.GetUserByIdAsync(int.Parse(userId)))!;
 
 		var Pal = await UserService.GetUserByIdAsync(int.Parse(powerPalId));
 		if (Pal== null)

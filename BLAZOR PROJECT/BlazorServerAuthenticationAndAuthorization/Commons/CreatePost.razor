@@ -32,12 +32,18 @@
 
 
 @code {
-    private string[] tags = new string[] { "Powerlifting", "Bodybuilding", "Weightlifting", "Strongman" };
-    public PostDataForm model = new PostDataForm() { };
-    public MudChip[] selected;
+    [Parameter]
+    public EventCallback OnClick { get; set; }
+
+    [Parameter]
+    public User user { get; set; } = new();
 
     [CascadingParameter]
-    protected Task<AuthenticationState> authenticationState { get; set; }
+    protected Task<AuthenticationState>? authenticationState { get; set; }
+
+    private string[] tags = new string[] { "Powerlifting", "Bodybuilding", "Weightlifting", "Strongman" };
+    private PostDataForm model = new();
+    private MudChip[]? selected;
 
     public class PostDataForm
     {
@@ -46,20 +52,14 @@
         public string text { get; set; } = "";
     }
 
-    [Parameter]
-    public EventCallback OnClick { get; set; }
-
-    [Parameter]
-    public User user { get; set; } = new();
-
     private async void Post(EditContext ctx)
     {
-        var state = await authenticationState;
+        var state = await authenticationState!;
         string userId = state.User.Claims.ToList().Find(i => i.Type == ClaimTypes.NameIdentifier)!.Value;
 
         await postService.CreatePostWithTags(
             new Post { UserId = int.Parse(userId), Content = model.text }, 
-            selected.Select(chip => chip.Text).ToList());
+            selected?.Select(chip => chip.Text).ToList() ?? new List<string>());
 
         model.text = "";
         await OnClick.InvokeAsync();

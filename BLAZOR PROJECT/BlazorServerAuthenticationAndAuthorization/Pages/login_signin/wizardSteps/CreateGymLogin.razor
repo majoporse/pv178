@@ -5,13 +5,5 @@
 @inject NavigationManager navigationManager
 
 <MudPaper Elevation="0" Style="width: 40%">
-	<CreateGym onsubmit="@(OnValidSubmit)" />
+	<CreateGym />
 </MudPaper>
-
-@code {
-	private void OnValidSubmit(RegisterGymForm model)
-	{
-		Console.WriteLine(model.ToString());
-		navigationManager.NavigateTo("/home");
-	}
-}

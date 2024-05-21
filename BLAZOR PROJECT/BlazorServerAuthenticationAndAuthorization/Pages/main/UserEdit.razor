@@ -36,12 +36,9 @@
 </EditForm>
 
 @code {
-    int step = 1;
+    private User user { get; set; } = new User();
 
-    public User user { get; set; } = new User();
-
-    public UserEditForm UserEditModel { get; set; } = new();
-    bool success;
+    private UserEditForm UserEditModel { get; set; } = new();
 
     private async void OnValidSubmit(EditContext context)
     {
@@ -56,9 +53,9 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var state = await ((CustomAuthenticationStateProvider)AuthenticationStateProvider).GetAuthenticationStateAsync();
+        var state = await ((CustomAuthenticationStateProvider) AuthenticationStateProvider).GetAuthenticationStateAsync();
         var userId = state.User.Claims.ToList().Find(i => i.Type == ClaimTypes.NameIdentifier)!.Value;
-        user = await userService.GetUserByIdAsync(int.Parse(userId));
+        user = (await userService.GetUserByIdAsync(int.Parse(userId)))!;
 
         UserEditModel.Username = user.Name;
         UserEditModel.Email = user.Email;
